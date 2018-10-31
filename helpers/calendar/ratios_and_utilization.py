@@ -1,3 +1,6 @@
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from .credentials import Credentials
 from helpers.calendar.analytics_helper import (CommonAnalytics)
 from api.room.models import Room as RoomModel
@@ -17,8 +20,12 @@ class RoomAnalyticsRatios(Credentials):
             - start_date, end_date
         """
 
-        start_date = CommonAnalytics.convert_date(self, start)
-        end_date = CommonAnalytics.convert_date(self, end)
+        if end is not None:
+            start_date = CommonAnalytics.convert_date(self, start)
+            end_date = (datetime.strptime(end, '%b %d %Y') + relativedelta(days=1)).isoformat() + 'Z'  # noqa: E501
+        else:
+            start_date, end_date = CommonAnalytics.get_start_end_day_dates(
+                self, start)
 
         rooms = CommonAnalytics.get_calendar_id_name(
             self, query)

@@ -92,7 +92,7 @@ class Query(graphene.ObjectType):
 
     analytics_ratios = graphene.Field(
         CheckinsToBookingsRatio,
-        start_date=graphene.String(),
+        start_date=graphene.String(required=True),
         end_date=graphene.String(),
     )
 
@@ -223,7 +223,7 @@ class Query(graphene.ObjectType):
         )
 
     @Auth.user_roles('Admin')
-    def resolve_analytics_ratios(self, info, start_date, end_date):  # noqa: E501
+    def resolve_analytics_ratios(self, info, start_date, end_date=None):  # noqa: E501
         query = Room.get_query(info)
         ratio = RoomAnalyticsRatios.get_analytics_ratios(
             self, query, start_date, end_date)
