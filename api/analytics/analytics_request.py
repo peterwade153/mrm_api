@@ -14,14 +14,12 @@ class AnalyticsRequest():
            get_analytic_report
            get_analytic_report_pdf_file
     """
-
     def validate_date(self, start_date, end_date):
         '''
         Validate date params
         '''
         try:
-            start_date = CommonAnalytics.convert_date(self, start_date)
-            end_date = CommonAnalytics.convert_date(self, end_date)
+            start_date, end_date = CommonAnalytics.convert_dates(self, start_date, end_date)  # noqa: E501
             return (start_date, end_date)
         except ValueError as err:
             raise JsonError(error=str(err), example='Sep 15 2018')
